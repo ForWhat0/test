@@ -169,7 +169,7 @@ export default App;
 
 const Game = styled.div`
   position: relative;
-  background: yellow;
+  background: pink;
   width: ${GAME_WIDTH}px;
   height: ${GAME_HEIGHT}px;
   display: flex;
