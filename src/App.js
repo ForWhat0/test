@@ -7,12 +7,12 @@ const GAME_WIDTH = document.body.scrollWidth;
 const GAME_LEFT_PADDING = 15 * GAME_HEIGHT / 100;;
 
 const BIRD_INITIAL_POSITION = 20 * GAME_HEIGHT / 100;
-const BIRD_HEIGHT = 8 * GAME_WIDTH / 100;
-const BIRD_WIDTH = 8 * GAME_WIDTH / 100;
-const BIRD_JUMP = 16 * GAME_WIDTH / 100;
+const BIRD_HEIGHT = 4 * GAME_WIDTH / 100;
+const BIRD_WIDTH = 4 * GAME_WIDTH / 100;
+const BIRD_JUMP = 12 * GAME_WIDTH / 100;
 
 const TUBE_WIDTH = 16 * GAME_WIDTH / 100;
-const TUBE_GAP =  30 * GAME_WIDTH / 100;
+const TUBE_GAP =  24 * GAME_WIDTH / 100;
 const INITIAL_TOP_TUBE_HEIGHT = 60 * GAME_HEIGHT / 100;
 
 const START = 'START';
@@ -25,36 +25,36 @@ const DIFF_SETTINGS = {
     START: {
         min: 0,
         max: 1,
-        game_gravity: 10,
-        tube_speed: 5,
+        game_gravity: 6,
+        tube_speed: 4,
         type: START
     },
     EASY: {
         min: 2,
         max: 5,
-        game_gravity: 10,
-        tube_speed: 6,
+        game_gravity: 6,
+        tube_speed: 5,
         type: EASY
     },
     MEDIUM: {
         min: 6,
         max: 10,
-        game_gravity: 10,
-        tube_speed: 7,
+        game_gravity: 6,
+        tube_speed: 6,
         type: MEDIUM
     },
     HARD: {
         min: 11,
         max: 20,
-        game_gravity: 10,
-        tube_speed: 8,
+        game_gravity: 6,
+        tube_speed: 7,
         type: HARD
     },
     ULTRA_HARD: {
         min: 21,
         max: 22,
-        game_gravity: 10,
-        tube_speed: 9,
+        game_gravity: 6,
+        tube_speed: 8,
         type: ULTRA_HARD
     },
 };
@@ -191,7 +191,6 @@ export default App;
 
 const Game = styled.div`
   position: relative;
-
   width: ${GAME_WIDTH}px;
   height: ${GAME_HEIGHT}px;
   display: flex;

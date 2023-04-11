@@ -44,8 +44,8 @@ html {
   width: 100%;
   height: 100%;
   background-image: url(d712d7bb7d20e62a64d27487f92f4a8f--apple-farm-game-background.jpg);
-  background-position: 0px 0px;
-  background-size: contain;
+  background-size: cover;
+  background-repeat: repeat-x;
   animation: animatedBackground 10s linear infinite;
   -moz-animation: animatedBackground 10s linear infinite;
   -webkit-animation: animatedBackground 10s linear infinite;
