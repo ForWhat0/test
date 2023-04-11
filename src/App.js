@@ -1,16 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
+import bird from './media_result_20230411_2f298c76-4ec1-40b6-857a-56fd01cd0b4f.png';
 
 const GAME_HEIGHT = document.body.scrollHeight;
 const GAME_WIDTH = document.body.scrollWidth;
+const GAME_LEFT_PADDING = 15 * GAME_HEIGHT / 100;;
 
 const BIRD_INITIAL_POSITION = 20 * GAME_HEIGHT / 100;
-const BIRD_HEIGHT = 4 * GAME_WIDTH / 100;
-const BIRD_WIDTH = 4 * GAME_WIDTH / 100;
-const BIRD_JUMP = 12 * GAME_WIDTH / 100;
+const BIRD_HEIGHT = 8 * GAME_WIDTH / 100;
+const BIRD_WIDTH = 8 * GAME_WIDTH / 100;
+const BIRD_JUMP = 16 * GAME_WIDTH / 100;
 
 const TUBE_WIDTH = 16 * GAME_WIDTH / 100;
-const TUBE_GAP =  24 * GAME_WIDTH / 100;
+const TUBE_GAP =  30 * GAME_WIDTH / 100;
 const INITIAL_TOP_TUBE_HEIGHT = 60 * GAME_HEIGHT / 100;
 
 const START = 'START';
@@ -23,36 +25,36 @@ const DIFF_SETTINGS = {
     START: {
         min: 0,
         max: 1,
-        game_gravity: 4,
-        tube_speed: 4,
+        game_gravity: 10,
+        tube_speed: 5,
         type: START
     },
     EASY: {
         min: 2,
         max: 5,
-        game_gravity: 5,
-        tube_speed: 5,
+        game_gravity: 10,
+        tube_speed: 6,
         type: EASY
     },
     MEDIUM: {
         min: 6,
         max: 10,
-        game_gravity: 6,
-        tube_speed: 6,
+        game_gravity: 10,
+        tube_speed: 7,
         type: MEDIUM
     },
     HARD: {
         min: 11,
         max: 20,
-        game_gravity: 7,
-        tube_speed: 7,
+        game_gravity: 10,
+        tube_speed: 8,
         type: HARD
     },
     ULTRA_HARD: {
         min: 21,
         max: 22,
-        game_gravity: 8,
-        tube_speed: 8,
+        game_gravity: 10,
+        tube_speed: 9,
         type: ULTRA_HARD
     },
 };
@@ -65,6 +67,7 @@ function App() {
     const [diff, setDiff] = useState(DIFF_SETTINGS.START.type);
     const [gameIsStarted, setGameIsStarted] = useState(false);
     const [birdPosition, setBirdPosition] = useState(BIRD_INITIAL_POSITION);
+    const [birdRotate, setBirdRotate] = useState(0);
     const [tubePosition, setTubePosition] = useState(GAME_WIDTH - TUBE_WIDTH);
     const [topTubeHeight, setTopTubeHeight] = useState(INITIAL_TOP_TUBE_HEIGHT);
     const [score, setScore] = useState(0);
@@ -104,7 +107,22 @@ function App() {
     }, [tubePosition, gameIsStarted, diff]);
 
     useEffect(() => {
-        if (gameIsStarted && BIRD_WIDTH >= tubePosition) {
+        if (!gameIsStarted) return;
+        let intervalId;
+        console.log(birdRotate)
+        if (birdRotate < 40) {
+            intervalId = setInterval(() => {
+                setBirdRotate( birdRotate + DIFF_SETTINGS[diff].game_gravity );
+            }, 24);
+
+            return () => {
+                clearInterval(intervalId);
+            };
+        }
+    }, [birdRotate, gameIsStarted]);
+
+    useEffect(() => {
+        if (gameIsStarted && between(tubePosition, GAME_LEFT_PADDING, BIRD_WIDTH + GAME_LEFT_PADDING)) {
             const hitTop = between(birdPosition, 0, topTubeHeight);
             const hitBottom = between(birdPosition, topTubeHeight + TUBE_GAP - BIRD_HEIGHT, GAME_HEIGHT);
 
@@ -130,6 +148,7 @@ function App() {
             setBirdPosition(BIRD_INITIAL_POSITION);
             setTubePosition(GAME_WIDTH + TUBE_WIDTH);
             setScore(0);
+            setBirdRotate(0);
         } else {
             const newPosition = birdPosition - BIRD_JUMP;
             if (newPosition > 0) {
@@ -137,6 +156,7 @@ function App() {
             } else {
                 setBirdPosition(0);
             }
+            setBirdRotate(-40);
         }
     }, [gameIsStarted, birdPosition])
 
@@ -146,6 +166,8 @@ function App() {
                 score={score}
             />
             <Bird
+                birdRotate={birdRotate}
+                src={bird}
                 top={birdPosition}
             />
             <Tube
@@ -169,7 +191,7 @@ export default App;
 
 const Game = styled.div`
   position: relative;
-  background: pink;
+
   width: ${GAME_WIDTH}px;
   height: ${GAME_HEIGHT}px;
   display: flex;
@@ -178,13 +200,13 @@ const Game = styled.div`
   cursor: pointer;
 `
 
-const Bird = styled.div`
+const Bird = styled.img`
   position: absolute;
-  left: 0;
+  left: ${GAME_LEFT_PADDING}px;
   top: ${props => props.top}px;
   height: ${BIRD_HEIGHT}px;
   width: ${BIRD_WIDTH}px;
-  background: blue;
+  transform: rotate(${props=>props.birdRotate}deg);
 `
 
 const Tube = styled.div`
