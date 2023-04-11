@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/test/static/css/main.96ce1cb4.css",
-    "main.js": "/test/static/js/main.333d060d.js",
+    "main.css": "/test/static/css/main.0f24e985.css",
+    "main.js": "/test/static/js/main.52af85da.js",
     "static/media/media_result_20230411_2f298c76-4ec1-40b6-857a-56fd01cd0b4f.png": "/test/static/media/media_result_20230411_2f298c76-4ec1-40b6-857a-56fd01cd0b4f.f559dee40fdb10f849b3.png",
     "service-worker.js": "/test/service-worker.js",
     "static/media/--apple-farm-game-background.jpg": "/test/static/media/d712d7bb7d20e62a64d27487f92f4a8f--apple-farm-game-background.7eb47c2221a689d438c8.jpg",
     "index.html": "/test/index.html",
-    "main.96ce1cb4.css.map": "/test/static/css/main.96ce1cb4.css.map",
-    "main.333d060d.js.map": "/test/static/js/main.333d060d.js.map"
+    "main.0f24e985.css.map": "/test/static/css/main.0f24e985.css.map",
+    "main.52af85da.js.map": "/test/static/js/main.52af85da.js.map"
   },
   "entrypoints": [
-    "static/css/main.96ce1cb4.css",
-    "static/js/main.333d060d.js"
+    "static/css/main.0f24e985.css",
+    "static/js/main.52af85da.js"
   ]
 }
