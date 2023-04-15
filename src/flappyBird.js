@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import styled, {keyframes} from "styled-components";
 
 const GAME_HEIGHT = 500;
@@ -19,6 +19,9 @@ const TUBE_MAX_HEIGHT_PROCENT = 60;
 const TUBE_MIN_HEIGHT_PROCENT = 15;
 
 const INITIAL_TOP_TUBE_HEIGHT = 60 * GAME_HEIGHT / 100;
+
+const BOTTOM_WIDTH = GAME_WIDTH * 3;
+const BOTTOM_LEFT = GAME_WIDTH + TUBE_WIDTH;
 
 
 const START = 'START';
@@ -133,7 +136,7 @@ function FlappyBird() {
             const hitTop = between(birdPosition, 0, topTubeHeight);
             const hitBottom = between(birdPosition, topTubeHeight + TUBE_GAP - BIRD_HEIGHT, GAME_HEIGHT);
 
-            if (hitTop || hitBottom) setGameIsStarted(false);
+      /*      if (hitTop || hitBottom) setGameIsStarted(false);*/
         }
     }, [tubePosition, gameIsStarted, birdPosition]);
 
@@ -167,6 +170,10 @@ function FlappyBird() {
         }
     }, [gameIsStarted, birdPosition])
 
+    const bottom = useMemo(()=>{
+        return -BOTTOM_LEFT + tubePosition;
+    },[tubePosition])
+
     return (
         <Body onClick={handleClick}>
             <Game>
@@ -191,30 +198,21 @@ function FlappyBird() {
                     height={bottomTubeHeight}
                 />
             </Game>
-            <Test/>
+            <Bottom
+                left={bottom}
+                width={BOTTOM_WIDTH}
+            />
         </Body>
     );
 }
 
 export default FlappyBird;
 
-const animation = keyframes`
-  0% {
-    background-position: 800px 0
-  }
-  100% {
-    background-position: -800px 0
-  }
-`
-
-const Test = styled.div`
-  width: 100%;
+const Bottom = styled.div`
+  width: ${props => props.width}px;
   height: 20px;
-  animation-duration: 7s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-name: ${animation};
-  animation-timing-function: linear;
+  position: relative;
+  left: ${props => props.left}px;
   background: repeating-linear-gradient(
           -45deg,
           greenyellow,
@@ -222,10 +220,7 @@ const Test = styled.div`
           green 10px,
           green 20px
   );
-  background-size: 800px 104px;
-  position: relative;
 `
-
 
 const Body = styled.div`
   width: 100%;
@@ -233,6 +228,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   background: #C2B280;
+  overflow: hidden;
   background: linear-gradient(to bottom, #C2B280 0%, #B3A371 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #C2B280), color-stop(100%, #B3A371));
   background: -webkit-linear-gradient(top, #C2B280 0%, #B3A371 100%);
