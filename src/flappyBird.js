@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 
 const GAME_HEIGHT = 500;
 const GAME_WIDTH = document.body.scrollWidth;
@@ -9,11 +9,15 @@ const BIRD_INITIAL_POSITION = 20 * GAME_HEIGHT / 100;
 const BIRD_HEIGHT = 5 * GAME_WIDTH / 100;
 const BIRD_WIDTH = 5 * GAME_WIDTH / 100;
 const BIRD_JUMP = 15 * GAME_HEIGHT / 100;
+const BIRD_ROTATE = 20;
 
 const TUBE_WIDTH = 10 * GAME_WIDTH / 100;
 const TUBE_GAP =  25 * GAME_HEIGHT / 100;
-const TUBE_START_CHECK = TUBE_WIDTH + GAME_LEFT_PADDING;
-const TUBE_END_CHECK = GAME_LEFT_PADDING - TUBE_WIDTH;
+const TUBE_START_CHECK = GAME_LEFT_PADDING - TUBE_WIDTH;
+const TUBE_END_CHECK = BIRD_WIDTH + GAME_LEFT_PADDING;
+const TUBE_MAX_HEIGHT_PROCENT = 60;
+const TUBE_MIN_HEIGHT_PROCENT = 15;
+
 const INITIAL_TOP_TUBE_HEIGHT = 60 * GAME_HEIGHT / 100;
 
 
@@ -102,8 +106,8 @@ function FlappyBird() {
                 clearInterval(intervalId);
             };
         } else {
-            const randomPercentage = Math.floor(Math.random() * (60 - 15 + 1)) + 15;
-            setTopTubeHeight((500 * randomPercentage) / 100);
+            const randomPercentage = Math.floor(Math.random() * (TUBE_MAX_HEIGHT_PROCENT - TUBE_MIN_HEIGHT_PROCENT + 1)) + TUBE_MIN_HEIGHT_PROCENT;
+            setTopTubeHeight((GAME_HEIGHT * randomPercentage) / 100);
             setTubePosition(GAME_WIDTH + TUBE_WIDTH);
             setScore((oldScore) => ++oldScore)
         }
@@ -113,7 +117,7 @@ function FlappyBird() {
         if (!gameIsStarted) return;
         let intervalId;
 
-        if (birdRotate < 40) {
+        if (birdRotate < BIRD_ROTATE) {
             intervalId = setInterval(() => {
                 setBirdRotate( birdRotate + DIFF_SETTINGS[diff].game_gravity );
             }, 24);
@@ -125,7 +129,7 @@ function FlappyBird() {
     }, [birdRotate, gameIsStarted]);
 
     useEffect(() => {
-        if (gameIsStarted && between(tubePosition, TUBE_END_CHECK, TUBE_START_CHECK)) {
+        if (gameIsStarted && between(tubePosition, TUBE_START_CHECK, TUBE_END_CHECK)) {
             const hitTop = between(birdPosition, 0, topTubeHeight);
             const hitBottom = between(birdPosition, topTubeHeight + TUBE_GAP - BIRD_HEIGHT, GAME_HEIGHT);
 
@@ -159,7 +163,7 @@ function FlappyBird() {
             } else {
                 setBirdPosition(0);
             }
-            setBirdRotate(-40);
+            setBirdRotate(-BIRD_ROTATE);
         }
     }, [gameIsStarted, birdPosition])
 
@@ -170,6 +174,7 @@ function FlappyBird() {
                     score={score}
                 />
                 <Bird
+                    src='https://img.itch.zone/aW1nLzcwNDU0NzcucG5n/315x250%23c/2zRXoU.png'
                     birdRotate={birdRotate}
                     top={birdPosition}
                 />
@@ -186,11 +191,41 @@ function FlappyBird() {
                     height={bottomTubeHeight}
                 />
             </Game>
+            <Test/>
         </Body>
     );
 }
 
 export default FlappyBird;
+
+const animation = keyframes`
+  0% {
+    background-position: 800px 0
+  }
+  100% {
+    background-position: -800px 0
+  }
+`
+
+const Test = styled.div`
+  width: 100%;
+  height: 20px;
+  animation-duration: 7s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: ${animation};
+  animation-timing-function: linear;
+  background: repeating-linear-gradient(
+          -45deg,
+          greenyellow,
+          greenyellow 10px,
+          green 10px,
+          green 20px
+  );
+  background-size: 800px 104px;
+  position: relative;
+`
+
 
 const Body = styled.div`
   width: 100%;
@@ -218,13 +253,12 @@ const Game = styled.div`
   background: rgb(135, 206, 235);
 `
 
-const Bird = styled.div`
+const Bird = styled.img`
   position: absolute;
   left: ${GAME_LEFT_PADDING}px;
   top: ${props => props.top}px;
   height: ${BIRD_HEIGHT}px;
   width: ${BIRD_WIDTH}px;
-  background: darkslategray;
   transform: rotate(${props=>props.birdRotate}deg);
 `
 
