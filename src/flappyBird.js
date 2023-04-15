@@ -136,7 +136,7 @@ function FlappyBird() {
             const hitTop = between(birdPosition, 0, topTubeHeight);
             const hitBottom = between(birdPosition, topTubeHeight + TUBE_GAP - BIRD_HEIGHT, GAME_HEIGHT);
 
-      /*      if (hitTop || hitBottom) setGameIsStarted(false);*/
+            if (hitTop || hitBottom) setGameIsStarted(false);
         }
     }, [tubePosition, gameIsStarted, birdPosition]);
 
